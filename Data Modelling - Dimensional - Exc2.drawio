@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" version="24.7.17">
   <diagram id="R2lEEEUBdFMjLlhIrx00" name="Page-1">
-    <mxGraphModel dx="1489" dy="705" grid="0" gridSize="11" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1800" background="#CCE5FF" math="0" shadow="0" extFonts="Permanent Marker^https://fonts.googleapis.com/css?family=Permanent+Marker">
+    <mxGraphModel dx="1540" dy="705" grid="0" gridSize="11" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1800" background="#CCE5FF" math="0" shadow="0" extFonts="Permanent Marker^https://fonts.googleapis.com/css?family=Permanent+Marker">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -341,8 +341,8 @@
             <mxRectangle width="276" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="5Bc8UwKq1f_1eTB7SCyp-82" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;&lt;u style=&quot;&quot;&gt;&amp;gt;General Technical Considerations&lt;/u&gt;&lt;/font&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;blockquote style=&quot;margin: 0 0 0 40px; border: none; padding: 0px;&quot;&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;0) Customer journey wise, this solution is incomplete as the post-sales and customer service segments are missing. It would be recommendable to track for a customer the number and nature of customer service tickes/incidents opened (e.g. technical problems, billing issues, etc.) as well as post-resolution surveys, the customer reviews from web-aggregators like Google or Trustpilot (via APIs), requests to switch supplier and for which reason (customer retention segment), if they recommended the supplier to a friend over time, etc.&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;All of these sources could be translated into ad-hoc dimensions and feed the Customer Satisfaction Fact table.&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;Another potential data model section to add to for the customer journey is the pre-sales phase, where the subscription process has been initiated but not yet finalised. This might correspond to specific events such as the telephony system receive calls or the web-site receive visits by the customers to enquiry about the services and the offers available. If the subscription never been finalised tracking the possible reason by contacting the customer and proposing special discounts, etc. These information would all help the company to improve the activation rate metrics and the marketing capaigns effectiveness.&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;1) To promote denormalization this dimentional model has been designed as a star schema with just 1 level of dimensions depth.&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;2) In the fact tables have been left measures only, while the attributes are only available in the corresponding dimensions. This improves the general read/write performance and overall scalability of the data load process (SCD) as reduces the data redundancy&amp;nbsp;&lt;span style=&quot;background-color: initial;&quot;&gt;(e.g. less records to filter and update, less columns to load in the large fact tables, no need to reload the same attribute across multiple fact tables)&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;, improves the reporting scalability (less historic data changes to filter), improves clarity and maintenance operations within the data model (e.g. no need to change a large fact table to add or modify an attribute), and makes the both the fact and dimension tables more reusable and linkable when required (an attribute can be reused across several fact tables just by linking the same dimension, that will be the only source of truth for that attribute, less granularity incomptibility issues when linking different fact tables).&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;3) To enable drill-down capability, the fact tables have been designed at the atomic data level. The data aggregation (roll up) can be performed at reporting level when required (e.g. PowerBI).&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;/blockquote&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 17px;&quot;&gt;&lt;u style=&quot;font-size: 18px;&quot;&gt;&amp;gt;E/R Diagram Considerations:&lt;/u&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;ul style=&quot;&quot;&gt;&lt;li style=&quot;font-size: 17px;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Customer Satisfaction Fact: This table can be aggregated at the reporting level (e.g. PowerBI) to determine the average, max, and min satisfaction score within specific date ranges. A dimension for external reviews could be added and linked to this fact table (customer_id=-1 if the customer is not recognizable). Product Id is not essential but useful to enable an ad-hoc reporting filter and track the satisfaction rate by product.&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot;font-size: 17px;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Survey Dim: This table may be populated using different source systems (phone, web, text, etc.) and at different source events (e.g. initial subscription, issue resolution, change of product, exit survey, etc.). The score is simplified here (e.g. 1 to 5) but different score ranges might be used over time and from different systems and they would be held in a dedicated table score codification table.&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot;font-size: 17px;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Offer Dim: This corresponds to the marketing campaign (a separate dimension to track the overarching marketing campaign event could be created). An offer can be linked to a specific product, a customer type/category, and a gift card and/or a discount (other forms of compensation could be included, such as subscriptions to external on-demand services, money-back offers, etc.).&amp;nbsp;&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot;font-size: 17px;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;The customer segmentation is driven by the Customer Type Dim (or Customer Category/Fascia) that would change according to specific factors such as Marital Status (e.g. Single/Married/Family), Age (e.g. Youth/Adults/Senior), Geography - Sales Area Region (e.g. London Area, South East, South West, Wales, etc.), or a combination of them. This depends on requirements and would be assigned at a prior stage by the data pipeline loading the Silver layer. According to the required complexity&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot;font-size: 17px;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;The Sales Area has been loaded as a separate dimension to streamline changes (change or swap sales area for multiple customers) and to include the Regional Account Manager (RAM). Sales Area Dim would be loaded starting from the customer address.&amp;nbsp;&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;fontStyle=1;" parent="1" vertex="1">
-          <mxGeometry x="20" y="1606" width="1893" height="481" as="geometry" />
+        <mxCell id="5Bc8UwKq1f_1eTB7SCyp-82" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;&lt;u style=&quot;&quot;&gt;&amp;gt;General Technical Considerations&lt;/u&gt;&lt;/font&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;blockquote style=&quot;margin: 0 0 0 40px; border: none; padding: 0px;&quot;&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;0) Customer journey: &lt;span style=&quot;font-weight: normal;&quot;&gt;This solution is incomplete as the post-sales and customer service segments are missing. It would be recommendable to track for a customer the number and nature of customer service tickes/incidents opened (e.g. technical problems, billing issues, etc.) as well as post-resolution surveys, the customer reviews from web-aggregators like Google or Trustpilot (via APIs), requests to switch supplier and for which reason (customer retention segment), if they recommended the supplier to a friend over time, etc.&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;All of these sources could be translated into ad-hoc dimensions and feed the Customer Satisfaction Fact table.&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;Another potential data model section to add to for the customer journey is the pre-sales phase, where the subscription process has been initiated but not yet finalised. This might correspond to specific events such as the telephony system receive calls or the web-site receive visits by the customers to enquiry about the services and the offers available. If the subscription never been finalised tracking the possible reason by contacting the customer and proposing special discounts, etc. These information would all help the company to improve the activation rate metrics and the marketing capaigns effectiveness.&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;1) OLAP Schema: &lt;span style=&quot;font-weight: normal;&quot;&gt;To promote denormalization and optimal reporting performance this dimentional model has been designed as a star schema.&lt;/span&gt;&amp;nbsp;&lt;span style=&quot;font-weight: normal;&quot;&gt;The snowflake schema would introduce some normalization which, if not striclty necessary, would be avoided here.&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;2) Measures vs Attributes separation: &lt;span style=&quot;font-weight: normal;&quot;&gt;By using a&amp;nbsp;&lt;span style=&quot;background-color: initial;&quot;&gt;Fact-Dimension Mirroring pattern,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;the fact tables have been designed to hold measures, while the attributes are available in the corresponding dimensions. This improves the general read/write performance and overall scalability of the data load process (SCD) as reduces data redundancy&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;(e.g. less records to filter and update, less columns to load in the large fact tables, no need to reload the same attribute across multiple fact tables). This pattern also&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;&amp;nbsp;improves the reporting scalability as less historic data changes has to be to filtered out, improves clarity and maintenance operations within the data model (e.g. no need to change a large fact table to add or modify an attribute), and makes both the fact and dimension tables more reusable and linkable when required (an attribute can be reused across several fact tables just by linking the same dimension which will be the only source of truth for that attribute, plus less granularity incomptibility issues when linking different fact tables).&lt;/span&gt;&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;3) Fact Tables Granularity: &lt;span style=&quot;font-weight: normal;&quot;&gt;To enable drill-down capability and keep at the minimum level the presence of non-additive measures, the fact tables have been designed at the atomic data level. The data aggregation (roll up) can be performed at reporting level when required (e.g. PowerBI).&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;/blockquote&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;u&gt;&amp;gt;Business Requirements Review&lt;/u&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;u&gt;&lt;br&gt;&lt;/u&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;ul style=&quot;&quot;&gt;&lt;li style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 18px; background-color: initial;&quot;&gt;Number of new customers subscribing to the company&#39;s services: &lt;span style=&quot;font-weight: normal;&quot;&gt;This can be queried by joining Sales Fact with Sales Dim where we can filter by the is_new_customer flag and the the sales_date key.&lt;/span&gt;&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot;font-size: 18px;&quot;&gt;Assume the supplier offers several different standard tariffs and wants to show how many customers, and of what type, sign up for each tariff every day: &lt;span style=&quot;font-weight: normal;&quot;&gt;This can be obtained by joining the Sales Fact with the Product, Customer, and Customer Type Dims&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;We also want to track&amp;nbsp;&lt;/span&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;sign-up against any special offers that the customer may be taking advantage of when they apply, and the stated&amp;nbsp;&lt;/font&gt;&lt;font style=&quot;background-color: initial; font-size: 18px;&quot;&gt;reasons for joining, as provided by a satisfaction survey that the customer fills in when they join: &lt;span style=&quot;font-weight: normal;&quot;&gt;To achieve this we can&amp;nbsp;&lt;/span&gt;&lt;/font&gt;&lt;span style=&quot;font-size: 18px; font-weight: normal;&quot;&gt;join the Sales Fact with the Product, Customer, and Offers Dims and join this result set with the Customer Satisfaction Fact joined with the Survey Dim. These 2 results sets can have a consistent 1-to-1 relationship by using product_id and customer_id and filtering by the is_new_customer flag equal to 1 and event_type flag (the event type value would be something like &quot;onboard survey&quot;). Cust_comment will give the reason for joining, which might be potentially standardized with a specific list of values (look-up dimension would be required in the Silver layer).&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;div&gt;&lt;u&gt;&lt;br&gt;&lt;/u&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 17px;&quot;&gt;&lt;u style=&quot;font-size: 18px;&quot;&gt;&amp;gt;E/R Diagram Considerations&lt;/u&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;ul style=&quot;&quot;&gt;&lt;li style=&quot;font-size: 17px;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Customer Satisfaction Fact: &lt;span style=&quot;font-weight: normal;&quot;&gt;This table can be aggregated at the reporting level (e.g. PowerBI) to determine the average, max, and minimum satisfaction score within specific date ranges. A dimension for external reviews could be added and linked to this fact table (customer_id=-1 if the customer is not recognizable). Product Id is not essential but useful to enable an ad-hoc reporting filter and track the satisfaction rate by product.&lt;/span&gt;&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot;font-size: 17px;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Survey Dim: &lt;span style=&quot;font-weight: normal;&quot;&gt;This table may be populated using different source systems (phone, web, text, etc.) and at different source events (e.g. initial subscription, issue resolution, change of product, exit survey, etc.). The score is simplified here (e.g. 1 to 5) but different score ranges might be used over time and from different systems and they would be held in a dedicated table score codification table.&lt;/span&gt;&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot;font-size: 17px;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Offer Dim: &lt;span style=&quot;font-weight: normal;&quot;&gt;This corresponds to the marketing campaign (a separate dimension to track the overarching marketing campaign event could be created). An offer can be linked to a specific product, a customer type/category, and a gift card and/or a discount (other forms of compensation could be included, such as subscriptions to external on-demand services, money-back offers, etc.).&amp;nbsp;&lt;/span&gt;&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot;font-size: 17px;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Customer Type Dim: &lt;span style=&quot;font-weight: normal;&quot;&gt;The customer segmentation is driven by this table (or Customer Category/Fascia) that would change according to specific factors such as Marital Status (e.g. Single/Married/Family), Age (e.g. Youth/Adults/Senior), Geography - Sales Area Region (e.g. London Area, South East, South West, Wales, etc.), or a combination of them. This depends on requirements and would be assigned at a prior stage by the data pipeline loading the Silver layer, according to the required complexity.&lt;/span&gt;&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot;font-size: 17px;&quot;&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Sales Area Dim: &lt;span style=&quot;font-weight: normal;&quot;&gt;This has been loaded as a separate dimension to streamline changes (change or swap sales area for multiple customers) and to include the Regional Account Manager (RAM). Sales Area Dim would be loaded starting from the customer address.&lt;/span&gt;&amp;nbsp;&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="15" y="1717" width="1893" height="481" as="geometry" />
         </mxCell>
         <mxCell id="5Bc8UwKq1f_1eTB7SCyp-121" value="Survey Dim" style="shape=table;startSize=29;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;align=center;resizeLast=1;fillColor=#f0f6ff;strokeColor=#6c8ebf;fontStyle=1;gradientColor=#0066FF;rounded=1;shadow=1;" parent="1" vertex="1">
           <mxGeometry x="1166" y="1111" width="306" height="210" as="geometry" />
@@ -407,7 +407,7 @@
             <mxRectangle width="30" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="5p0k1yBP0SDuxStHFk_L-105" value="source_event varchar(200) NOT NULL" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-103">
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-105" value="event_type varchar(200) NOT NULL" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-103">
           <mxGeometry x="30" width="276" height="30" as="geometry">
             <mxRectangle width="276" height="30" as="alternateBounds" />
           </mxGeometry>
@@ -420,7 +420,7 @@
             <mxRectangle width="30" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="5p0k1yBP0SDuxStHFk_L-102" value="comments varchar(4000) NULL" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-100">
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-102" value="cust_comments varchar(4000) NULL" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-100">
           <mxGeometry x="30" width="276" height="30" as="geometry">
             <mxRectangle width="276" height="30" as="alternateBounds" />
           </mxGeometry>
@@ -478,7 +478,7 @@
             <mxRectangle width="30" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="c_tfulb-xMNJqZinGDg5-29" value="order_id bigint NOT NULL " style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=1;rounded=1;" parent="c_tfulb-xMNJqZinGDg5-27" vertex="1">
+        <mxCell id="c_tfulb-xMNJqZinGDg5-29" value="sales_id bigint NOT NULL " style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=1;rounded=1;" parent="c_tfulb-xMNJqZinGDg5-27" vertex="1">
           <mxGeometry x="30" width="301" height="30" as="geometry">
             <mxRectangle width="301" height="30" as="alternateBounds" />
           </mxGeometry>
@@ -683,8 +683,21 @@
             <mxRectangle width="301" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="5p0k1yBP0SDuxStHFk_L-64" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-57">
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-61" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-57">
           <mxGeometry y="63" width="331" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-62" value="FK" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-61">
+          <mxGeometry width="30" height="30" as="geometry">
+            <mxRectangle width="30" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-63" value="product_id bigint NOT NULL" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-61">
+          <mxGeometry x="30" width="301" height="30" as="geometry">
+            <mxRectangle width="301" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-64" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-57">
+          <mxGeometry y="93" width="331" height="30" as="geometry" />
         </mxCell>
         <mxCell id="5p0k1yBP0SDuxStHFk_L-65" value="FK" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-64">
           <mxGeometry width="30" height="30" as="geometry">
@@ -697,7 +710,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="5p0k1yBP0SDuxStHFk_L-91" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-57">
-          <mxGeometry y="93" width="331" height="30" as="geometry" />
+          <mxGeometry y="123" width="331" height="30" as="geometry" />
         </mxCell>
         <mxCell id="5p0k1yBP0SDuxStHFk_L-92" value="FK" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-91">
           <mxGeometry width="30" height="30" as="geometry">
@@ -705,19 +718,6 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="5p0k1yBP0SDuxStHFk_L-93" value="survey_id bigint NOT NULL" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-91">
-          <mxGeometry x="30" width="301" height="30" as="geometry">
-            <mxRectangle width="301" height="30" as="alternateBounds" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="5p0k1yBP0SDuxStHFk_L-61" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-57">
-          <mxGeometry y="123" width="331" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="5p0k1yBP0SDuxStHFk_L-62" value="FK" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-61">
-          <mxGeometry width="30" height="30" as="geometry">
-            <mxRectangle width="30" height="30" as="alternateBounds" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="5p0k1yBP0SDuxStHFk_L-63" value="product_id bigint NOT NULL" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-61">
           <mxGeometry x="30" width="301" height="30" as="geometry">
             <mxRectangle width="301" height="30" as="alternateBounds" />
           </mxGeometry>
@@ -902,6 +902,92 @@
           <mxGeometry width="100" height="100" relative="1" as="geometry">
             <mxPoint x="1045" y="1350" as="sourcePoint" />
             <mxPoint x="1145" y="1250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-183" value="Sales Dim" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;align=center;resizeLast=1;fillColor=#f0f6ff;strokeColor=#6c8ebf;fontStyle=1;gradientColor=#0066FF;rounded=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="204" y="309" width="306" height="181" as="geometry" />
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-184" value="" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-183">
+          <mxGeometry y="30" width="306" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-185" value="PK" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-184">
+          <mxGeometry width="30" height="30" as="geometry">
+            <mxRectangle width="30" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-186" value="sales_id bigint NOT NULL " style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-184">
+          <mxGeometry x="30" width="276" height="30" as="geometry">
+            <mxRectangle width="276" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-193" value="" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-183">
+          <mxGeometry y="60" width="306" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-194" value="FK" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-193">
+          <mxGeometry width="30" height="26" as="geometry">
+            <mxRectangle width="30" height="26" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-195" value="product_id bigint NOT NULL" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-193">
+          <mxGeometry x="30" width="276" height="26" as="geometry">
+            <mxRectangle width="276" height="26" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-196" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-183">
+          <mxGeometry y="86" width="306" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-197" value="FK" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-196">
+          <mxGeometry width="30" height="26" as="geometry">
+            <mxRectangle width="30" height="26" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-198" value="new_product_id bigint NULL" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-196">
+          <mxGeometry x="30" width="276" height="26" as="geometry">
+            <mxRectangle width="276" height="26" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-199" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-183">
+          <mxGeometry y="112" width="306" height="31" as="geometry" />
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-200" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-199">
+          <mxGeometry width="30" height="31" as="geometry">
+            <mxRectangle width="30" height="31" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-201" value="sales_code varchar(255) NOT NULL" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-199">
+          <mxGeometry x="30" width="276" height="31" as="geometry">
+            <mxRectangle width="276" height="31" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-190" value="" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-183">
+          <mxGeometry y="143" width="306" height="31" as="geometry" />
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-191" value="" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-190">
+          <mxGeometry width="30" height="31" as="geometry">
+            <mxRectangle width="30" height="31" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-192" value="is_new_customer bit NOT NULL" style="shape=partialRectangle;overflow=hidden;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;fontStyle=1;rounded=1;" vertex="1" parent="5p0k1yBP0SDuxStHFk_L-190">
+          <mxGeometry x="30" width="276" height="31" as="geometry">
+            <mxRectangle width="276" height="31" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-203" value="" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERmandOne;startArrow=ERmandOne;rounded=0;entryX=0.992;entryY=0.273;entryDx=0;entryDy=0;entryPerimeter=0;flowAnimation=1;" edge="1" parent="1" source="c_tfulb-xMNJqZinGDg5-27" target="5p0k1yBP0SDuxStHFk_L-184">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="567" y="427" as="sourcePoint" />
+            <mxPoint x="667" y="327" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-204" value="" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERoneToMany;rounded=0;flowAnimation=1;fillColor=#fa6800;strokeColor=#C73500;" edge="1" parent="1" source="5Bc8UwKq1f_1eTB7SCyp-10" target="5p0k1yBP0SDuxStHFk_L-193">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="106" y="486" as="sourcePoint" />
+            <mxPoint x="206" y="386" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5p0k1yBP0SDuxStHFk_L-205" value="" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERoneToMany;rounded=0;fillColor=#1ba1e2;strokeColor=#006EAF;flowAnimation=1;" edge="1" parent="1" source="5Bc8UwKq1f_1eTB7SCyp-10" target="5p0k1yBP0SDuxStHFk_L-196">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="330" y="524" as="sourcePoint" />
+            <mxPoint x="430" y="424" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
